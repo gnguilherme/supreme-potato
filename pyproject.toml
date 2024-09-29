@@ -9,13 +9,15 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
+
+[tool.poetry.group.backend.dependencies]
 openai = "^1.50.2"
 langchain = "^0.3.1"
 langchain-openai = "^0.2.1"
 fastapi = "^0.115.0"
 
-
 [tool.poetry.group.dev.dependencies]
+pre-commit = "^3.8.0"
 ruff = "^0.6.8"
 black = "^24.8.0"
 
