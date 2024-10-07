@@ -1,4 +1,4 @@
-"""Streamlit app for the project."""
+"""Main app for the project."""
 
 from typing import Any
 

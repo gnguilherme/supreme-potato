@@ -11,9 +11,6 @@ package-mode = false
 python = "^3.10"
 
 [tool.poetry.group.backend.dependencies]
-openai = "^1.50.2"
-langchain = "^0.3.1"
-langchain-openai = "^0.2.1"
 fastapi = "^0.115.0"
 sqlalchemy = "^2.0.35"
 asyncpg = "^0.29.0"
@@ -24,7 +21,6 @@ uvicorn = "^0.31.0"
 pre-commit = "^3.8.0"
 ruff = "^0.6.8"
 black = "^24.8.0"
-
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.3"
