@@ -12,6 +12,20 @@ STRING = """===LAST BLOCK===
 ===NONCE===
 {nonce}"""
 
+FIRST_BLOCK = """{
+      "transaction": {
+        "sender": "0",
+        "receiver": "0",
+        "value": 0,
+        "currency": "0"
+      },
+      "keys": {
+        "nonce": "0",
+        "block": "0"
+      },
+      "last_block": "0"
+}"""
+
 
 class Keys(BaseModel):
     """Keys model for the backend module."""
