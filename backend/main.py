@@ -1,28 +1,41 @@
 """Main app for the project."""
 
+import asyncio
+import json
 from typing import Any
 
+from database import check_db, execute_query, get_db
+from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI
 from src import Block, Blockchain, Keys, Transaction
 
+success = load_dotenv(find_dotenv())
+
+
 app = FastAPI()
 
-FIRST_TRANSACTION = Transaction(
-    sender="0",
-    receiver="0",
-    value=0,
-    currency="0",
-)
-FIRST_BLOCK = Block(
-    transaction=FIRST_TRANSACTION,
-    keys=Keys(nonce="0", block="0"),
-    last_block="0",
-)
-blockchain = Blockchain(blocks=[FIRST_BLOCK])
+
+async def initialize_blockchain():
+    global blockchain
+    result = await check_db()
+    blockchain = []
+    for block in result:
+        block = json.loads(block["blocks"])
+        print(block)
+        transactions = Transaction(**block["transaction"])
+        keys = Keys(**block["keys"])
+        blockchain.append(
+            Block(transaction=transactions, keys=keys, last_block=block["last_block"])
+        )
+
+    blockchain = Blockchain(blocks=blockchain)
+
+
+asyncio.run(initialize_blockchain())
 
 
 @app.post("/add_block")
-def add_block(
+async def add_block(
     sender: str, receiver: str, value: float, currency: str, complexity: int
 ) -> dict[str, Any]:
     """Add a new block to the blockchain.
@@ -44,6 +57,9 @@ def add_block(
         currency=currency,
     )
     blockchain.add_block(transaction, complexity)
+    query = f"INSERT INTO blockchain (blocks) VALUES ('{blockchain.blocks[-1].model_dump()}');"
+    conn = await get_db()
+    await execute_query(conn, query)
 
     return blockchain.model_dump()
 
